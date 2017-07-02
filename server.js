@@ -3,8 +3,17 @@ var http = require("http");
 
 requestHandler = function(request, response) {
     console.log(request.url);
-    response.write("Hello World!");
-    response.end();
+    console.log(request.method);
+
+    if(request.method == "GET") {
+        response.write(request.method + " request to " + request.url);
+        response.end();
+    }
+    else if (request.method == "POST") {
+        response.write(request.method + " request to " + request.url);
+        response.end();
+    }
+
 };
 
 

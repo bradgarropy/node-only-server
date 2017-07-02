@@ -1,0 +1,25 @@
+{
+    "name": "node-only-server",
+    "version": "0.0.1",
+    "description": "Web server with only Node.",
+    "main": "server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node server.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/bradgarropy/node-only-server.git"
+    },
+    "keywords": [
+        "node",
+        "webserver",
+        "webapp"
+    ],
+    "author": "Brad Garropy",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/bradgarropy/node-only-server/issues"
+    },
+    "homepage": "https://github.com/bradgarropy/node-only-server#readme"
+}
