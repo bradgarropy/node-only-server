@@ -1,9 +1,13 @@
-const http = require("http");
-const qs = require("querystring");
-const fs = require("fs");
+const querystring = require("querystring");
+const http        = require("http");
+const url         = require('url');
+const fs          = require("fs");
 
 
 requestHandler = function(request, response) {
+
+    console.log(request.method);
+    console.log(request.url);
 
     // GET Method
     if(request.method == "GET") {
@@ -39,7 +43,7 @@ requestHandler = function(request, response) {
             response.write(html);
             response.end();
         }
-        if(request.url == "/api/weight") {
+        else if(request.url == "/api/weight") {
             let weights = fs.readFileSync("weight.json");
 
             response.write(weights);
@@ -67,7 +71,7 @@ requestHandler = function(request, response) {
             request.on('end', function() {
 
                 // parse post data
-                let post = qs.parse(query);
+                let post = querystring.parse(query);
 
                 // convert weight to int
                 post.weight = parseInt(post.weight);
@@ -76,8 +80,10 @@ requestHandler = function(request, response) {
                 let weights = fs.readFileSync("weight.json");
                 weights = JSON.parse(weights);
                 weights.push(post);
+                weights = JSON.stringify(weights, null, 4);
+                fs.writeFileSync("weight.json", weights);
 
-                response.write(JSON.stringify(weights));
+                response.write(weights);
                 response.end();
             });
         }
@@ -86,6 +92,28 @@ requestHandler = function(request, response) {
             response.write("<!doctype html><html><head><title>404</title></head><body>404: Resource Not Found</body></html>");
             response.end();
         }
+    }
+
+    // Delete Method
+    else if(request.method == "DELETE") {
+
+        // parse date from uri
+        let u = url.parse(request.url);
+        let pathname = u.pathname.split("/");
+        let date = pathname[pathname.length - 1];
+
+        // giving up here
+        // parsing uri's with variable data using regexes is crazy
+        // time to use express
+        if(request.url == "/api/weight/:date") {
+            console.log("Found a date to delete!");
+        }
+        else {
+            response.writeHead(404);
+            response.write("<!doctype html><html><head><title>404</title></head><body>404: Resource Not Found</body></html>");
+            response.end();
+        }
+
     }
 
     // Unknown Method
