@@ -13,8 +13,14 @@
     },
     "keywords": [
         "node",
-        "webserver",
-        "webapp"
+        "nodejs",
+        "rest",
+        "rest-api",
+        "web-server",
+        "web-app",
+        "web-application",
+        "javascript",
+        "html"
     ],
     "author": "Brad Garropy",
     "license": "ISC",
