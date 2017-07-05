@@ -67,9 +67,9 @@ requestHandler = function(request, response) {
     else if (request.method == "POST") {
 
         if(request.url == "/api/weight") {
-            let query = "";
 
             // read all incoming data
+            let query = "";
             request.on('data', function(data) {
                 query += data;
             });
@@ -77,18 +77,18 @@ requestHandler = function(request, response) {
             // perform actions
             request.on('end', function() {
 
-                // parse post data
-                let post = querystring.parse(query);
+                // parse body data
+                let body = querystring.parse(query);
 
                 // convert weight to int
-                post.weight = parseInt(post.weight);
+                body.weight = parseInt(body.weight);
 
                 // read weight file
                 let weights = fs.readFileSync("weight.json");
                 weights = JSON.parse(weights);
 
                 // add new weight
-                weights.push(post);
+                weights.push(body);
 
                 // write weight file
                 weights = JSON.stringify(weights, null, 4);
@@ -103,6 +103,55 @@ requestHandler = function(request, response) {
             response.writeHead(404);
             response.write("<!doctype html><html><head><title>404</title></head><body>404: Resource Not Found</body></html>");
             response.end();
+        }
+    }
+
+    // Patch Method
+    else if(request.method == "PATCH") {
+
+        // test for /api/weight/:date endpoint
+        let regex = /\/api\/weight\/\d{4}-\d{2}-\d{2}/i;
+        if(regex.test(request.url)) {
+
+            // read all incoming data
+            let query = "";
+            request.on('data', function(data) {
+                query += data;
+            });
+
+            // perform actions
+            request.on('end', function() {
+
+                // parse body data
+                let body = querystring.parse(query);
+
+                // convert weight to int
+                body.weight = parseInt(body.weight);
+
+                // parse date from url
+                let date = request.url.split("/");
+                date = date[date.length - 1];
+
+                // read weight file
+                let weights = fs.readFileSync("weight.json");
+                weights = JSON.parse(weights);
+
+                // find index of object
+                let index = weights.findIndex(function(weight) {
+                    return weight.date == date;
+                });
+
+                // update weight
+                weights[index].weight = body.weight;
+
+                // write weight file
+                weights = JSON.stringify(weights, null, 4);
+                fs.writeFileSync("weight.json", weights);
+
+                // send response
+                response.write(weights);
+                response.end();
+            });
         }
     }
 
