@@ -1,9 +1,10 @@
 const querystring = require("querystring");
+const model       = require("./models/model");
 const http        = require("http");
 const fs          = require("fs");
 
 
-requestHandler = function(request, response) {
+function requestHandler(request, response) {
 
     console.log(request.method);
     console.log(request.url);
@@ -14,8 +15,7 @@ requestHandler = function(request, response) {
         if(request.url == "/") {
 
             // read weight file
-            let weights = fs.readFileSync("weight.json");
-            weights = JSON.parse(weights);
+            weights = model.read();
 
             // create html table
             let data = "";
@@ -50,10 +50,10 @@ requestHandler = function(request, response) {
         else if(request.url == "/api/weight") {
 
             // read weight file
-            let weights = fs.readFileSync("weight.json");
+            weights = model.read();
 
             // send response
-            response.write(weights);
+            response.write(JSON.stringify(weights, null, 4));
             response.end();
         }
         else {
@@ -80,19 +80,8 @@ requestHandler = function(request, response) {
                 // parse body data
                 let body = querystring.parse(query);
 
-                // convert weight to int
-                body.weight = parseInt(body.weight);
-
-                // read weight file
-                let weights = fs.readFileSync("weight.json");
-                weights = JSON.parse(weights);
-
-                // add new weight
-                weights.push(body);
-
-                // write weight file
-                weights = JSON.stringify(weights, null, 4);
-                fs.writeFileSync("weight.json", weights);
+                // add new weights
+                weights = model.add(body);
 
                 // send response
                 response.write(weights);
@@ -125,28 +114,12 @@ requestHandler = function(request, response) {
                 // parse body data
                 let body = querystring.parse(query);
 
-                // convert weight to int
-                body.weight = parseInt(body.weight);
-
                 // parse date from url
                 let date = request.url.split("/");
                 date = date[date.length - 1];
 
-                // read weight file
-                let weights = fs.readFileSync("weight.json");
-                weights = JSON.parse(weights);
-
-                // find index of object
-                let index = weights.findIndex(function(weight) {
-                    return weight.date == date;
-                });
-
                 // update weight
-                weights[index].weight = body.weight;
-
-                // write weight file
-                weights = JSON.stringify(weights, null, 4);
-                fs.writeFileSync("weight.json", weights);
+                weights = model.update(date, body.weight);
 
                 // send response
                 response.write(weights);
@@ -166,21 +139,8 @@ requestHandler = function(request, response) {
             let date = request.url.split("/");
             date = date[date.length - 1];
 
-            // read weight file
-            let weights = fs.readFileSync("weight.json");
-            weights = JSON.parse(weights);
-
-            // find and remove date
-            for(let i = 0; i < weights.length; i++) {
-                if (weights[i].date == date) {
-                    weights.splice(i, 1);
-                    break;
-                }
-            }
-
-            // write weight file
-            weights = JSON.stringify(weights, null, 4);
-            fs.writeFileSync("weight.json", weights);
+            // remove weight
+            weights = model.remove(date);
 
             // send response
             response.write(weights);
@@ -201,7 +161,7 @@ requestHandler = function(request, response) {
         response.end();
     }
 
-};
+}
 
 
 let port = 3000;
