@@ -164,8 +164,9 @@ function requestHandler(request, response) {
 }
 
 
-let port = 3000;
-let server = http.createServer(requestHandler);
+// start server
+const port = 3000;
+const server = http.createServer(requestHandler);
 server.listen(port, function() {
     console.log("Server listening on port %s.", port);
 });
