@@ -1,7 +1,5 @@
 # Web Server & REST API Using Only NodeJS
 
-## Description
-
 *Learning about the world of JavaScript can be incredibly daunting.  
 Learning [NodeJS](https://nodejs.org) is even worse.*
 
