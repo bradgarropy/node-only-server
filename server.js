@@ -1,4 +1,5 @@
 const querystring = require("querystring");
+const index       = require("./views/index");
 const http        = require("http");
 const fs          = require("fs");
 
@@ -34,38 +35,6 @@ function requestHandler(request, response) {
 }
 
 
-function weight_table(weights) {
-
-    // create html table
-    let table = "";
-    weights.forEach(function(weight) {
-        table += "<tr><td>" + weight.date + "</td><td>" + weight.weight + "</td></tr>";
-    });
-
-    // html template
-    let html =
-    `
-    <html>
-        <head></head>
-
-        <body>
-
-            <table>
-                <tr>
-                    <th>Date</th>
-                    <th>Weight</th>
-                </tr>
-                ${table}
-            </table>
-
-        </body>
-    </html>
-    `;
-
-    return html;
-}
-
-
 function getHandler(request, response) {
 
     if(request.url === "/") {
@@ -86,11 +55,10 @@ function getHandler(request, response) {
                 let weights = JSON.parse(data);
 
                 // render html table
-                let html = weight_table(weights);
+                let html = index.render(weights);
 
                 // send response
-                response.write(html);
-                response.end();
+                sendResponse(response, html);
             }
         });
     }
@@ -107,10 +75,8 @@ function getHandler(request, response) {
 
             // carry on
             else {
-
                 // send response
-                response.write(data);
-                response.end();
+                sendResponse(response, data);
             }
         });
     }
@@ -143,7 +109,7 @@ function postHandler(request, response) {
             body.weight = parseInt(body.weight);
 
             // read file
-            fs.readFile("./models/weight.json", function handleFile(err, data) {
+            fs.readFile("./models/weight.json", function(err, data) {
 
                 // check errors
                 if(err) {
@@ -164,7 +130,7 @@ function postHandler(request, response) {
                     weights = JSON.stringify(weights, null, 4);
 
                     // write file
-                    fs.writeFile("./models/weight.json", weights, function handleFile(err) {
+                    fs.writeFile("./models/weight.json", weights, function(err) {
 
                         // check errors
                         if(err) {
@@ -174,10 +140,8 @@ function postHandler(request, response) {
 
                         // carry on
                         else {
-
                             // send response
-                            response.write(weights);
-                            response.end();
+                            sendResponse(response, weights);
                         }
                     });
                 }
@@ -221,7 +185,7 @@ function patchHandler(request, response) {
             // TODO: Validate url date.
 
             // read file
-            fs.readFile("./models/weight.json", function handleFile(err, data) {
+            fs.readFile("./models/weight.json", function(err, data) {
 
                 // check errors
                 if(err) {
@@ -247,7 +211,7 @@ function patchHandler(request, response) {
                     weights = JSON.stringify(weights, null, 4);
 
                     // write file
-                    fs.writeFile("./models/weight.json", weights, function handleFile(err) {
+                    fs.writeFile("./models/weight.json", weights, function(err) {
 
                         // check errors
                         if(err) {
@@ -257,10 +221,8 @@ function patchHandler(request, response) {
 
                         // carry on
                         else {
-
                             // send response
-                            response.write(weights);
-                            response.end();
+                            sendResponse(response, weights);
                         }
                     });
                 }
@@ -280,7 +242,7 @@ function deleteHandler(request, response) {
         let date = request.url.split("/");
         date = date[date.length - 1];
 
-        fs.readFile("./models/weight.json", function handleFile(err, data) {
+        fs.readFile("./models/weight.json", function(err, data) {
 
             // check errors
             if(err) {
@@ -306,7 +268,7 @@ function deleteHandler(request, response) {
                 weights = JSON.stringify(weights, null, 4);
 
                 // write file
-                fs.writeFile("./models/weight.json", weights, function handleFile(err) {
+                fs.writeFile("./models/weight.json", weights, function(err) {
 
                     // catch error
                     if (err) {
@@ -316,10 +278,8 @@ function deleteHandler(request, response) {
 
                     // carry on
                     else {
-
                         // send response
-                        response.write(weights);
-                        response.end();
+                        sendResponse(response, weights);
                     }
                 });
             }
@@ -334,6 +294,8 @@ function deleteHandler(request, response) {
 
 function sendResponse(response, data) {
 
+    response.write(data);
+    response.end();
 }
 
 
@@ -345,16 +307,16 @@ function sendError(response) {
     response.write(
         `
         <!doctype html>
-            <html>
+        <html>
 
-                <head>
-                    <title>404</title>
-                </head>
+            <head>
+                <title>404</title>
+            </head>
 
-                <body>404: Resource Not Found</body>
+            <body>404: Resource Not Found</body>
 
-            </html>
-            `);
+        </html>
+        `);
 
     response.end();
 }
