@@ -9,6 +9,22 @@ My aim was to understand what [Node](https://nodejs.org/) had to offer on its ow
 
 And indeed I did.
 
+
+## Project Iterations
+
+1. [node-only-server](https://github.com/bradgarropy/node-only-server)
+2. [node-express-server](https://github.com/bradgarropy/node-express-server)
+3. [node-express-pug-server](https://github.com/bradgarropy/node-express-pug-server)
+4. [node-express-pug-mongo-server](https://github.com/bradgarropy/node-express-pug-mongodb-server)
+
+
+## Lessons Learned
+
+Route parsing is a bitch using only the basic modules.
+
+Next iteration of this project will include [Express](https://expressjs.com/) for it's excellent route parsing and middleware options.
+
+
 ## Features
 
 This simple web application tracks weight measurements. It implements the following HTTP methods:
@@ -20,6 +36,7 @@ This simple web application tracks weight measurements. It implements the follow
 
 It also offers one page, the index, which shows the current weight entries.
 
+
 ## Usage
 
 First, clone down the repository. Next, run the following command from inside the directory:
@@ -27,6 +44,7 @@ First, clone down the repository. Next, run the following command from inside th
 `npm start` or `node server`
 
 In order to access the index page, navigate to `localhost:3000` in your browser.
+
 
 ## REST API
 
@@ -53,9 +71,3 @@ Parameters: { "weight": 180 }
 ```
 DELETE /api/weight/:date
 ```
-
-## Lessons Learned
-
-Route parsing is a bitch using only the basic modules.
-
-Next iteration of this project will include [Express](https://expressjs.com/) for it's excellent route parsing and middleware options.
