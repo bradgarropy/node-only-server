@@ -10,19 +10,19 @@ My aim was to understand what [Node](https://nodejs.org/) had to offer on its ow
 And indeed I did.
 
 
+## Lessons Learned
+
+Route parsing is a bitch using only the basic modules.
+
+Next iteration of this project will include [Express](https://expressjs.com/) for it's excellent route parsing and middleware options.
+
+
 ## Project Iterations
 
 1. [node-only-server](https://github.com/bradgarropy/node-only-server)
 2. [node-express-server](https://github.com/bradgarropy/node-express-server)
 3. [node-express-pug-server](https://github.com/bradgarropy/node-express-pug-server)
 4. [node-express-pug-mongo-server](https://github.com/bradgarropy/node-express-pug-mongodb-server)
-
-
-## Lessons Learned
-
-Route parsing is a bitch using only the basic modules.
-
-Next iteration of this project will include [Express](https://expressjs.com/) for it's excellent route parsing and middleware options.
 
 
 ## Features
