@@ -25,6 +25,7 @@ function requestHandler(request, response) {
 }
 
 
+// http get
 function getHandler(request, response) {
 
     if(request.url === "/") {
@@ -39,6 +40,7 @@ function getHandler(request, response) {
 }
 
 
+// http post
 function postHandler(request, response) {
 
     if(request.url === "/api/weight") {
@@ -50,6 +52,7 @@ function postHandler(request, response) {
 }
 
 
+// http patch
 function patchHandler(request, response) {
 
     // test for /api/weight/:date endpoint
@@ -64,6 +67,7 @@ function patchHandler(request, response) {
 }
 
 
+// http delete
 function deleteHandler(request, response) {
 
     // test for /api/weight/:date endpoint
