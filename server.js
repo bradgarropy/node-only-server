@@ -42,7 +42,7 @@ function getHandler(request, response) {
 function postHandler(request, response) {
 
     if(request.url === "/api/weight") {
-        weight.add(request, response);
+        weight.create(request, response);
     }
     else {
         sendError(response);
@@ -70,7 +70,7 @@ function deleteHandler(request, response) {
     let regex = /\/api\/weight\/\d{4}-\d{2}-\d{2}/i;
 
     if(regex.test(request.url)) {
-        weight.remove(request, response);
+        weight.destroy(request, response);
     }
     else {
         sendError(response);

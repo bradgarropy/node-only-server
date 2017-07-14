@@ -2,28 +2,7 @@ const querystring = require("querystring");
 const fs          = require("fs");
 
 
-function read(request, response) {
-
-    // read file
-    fs.readFile("./models/weight.json", function(err, data) {
-
-        // check errors
-        if(err) {
-            console.log(err);
-            throw err;
-        }
-
-        // carry on
-        else {
-            // send response
-            response.write(data);
-            response.end();
-        }
-    });
-}
-
-
-function add(request, response) {
+function create(request, response) {
 
     // read all incoming data
     let query = "";
@@ -81,6 +60,27 @@ function add(request, response) {
                 });
             }
         });
+    });
+}
+
+
+function read(request, response) {
+
+    // read file
+    fs.readFile("./models/weight.json", function(err, data) {
+
+        // check errors
+        if(err) {
+            console.log(err);
+            throw err;
+        }
+
+        // carry on
+        else {
+            // send response
+            response.write(data);
+            response.end();
+        }
     });
 }
 
@@ -158,7 +158,7 @@ function update(request, response) {
 }
 
 
-function remove(request, response) {
+function destroy(request, response) {
 
     // parse date from url
     let date = request.url.split("/");
@@ -211,7 +211,7 @@ function remove(request, response) {
 
 
 // exports
-exports.read   = read;
-exports.add    = add;
-exports.update = update;
-exports.remove = remove;
+exports.create  = create;
+exports.read    = read;
+exports.update  = update;
+exports.destroy = destroy;
